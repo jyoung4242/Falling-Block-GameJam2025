@@ -40,6 +40,7 @@ const game = new Engine({
   },
 });
 
+let globalMuteFlag = false;
 export const soundManager = new SoundManager({
   channels: ["music"],
   sounds: {
@@ -61,8 +62,7 @@ for (const sound in sounds) {
 export const gameRNG = new Random();
 await game.start(loader);
 game.goToScene("intro");
-//export const pp = new WellLighting(game, Color.White, 0.8, 2.0, Color.ExcaliburBlue);
-//game.graphicsContext.addPostProcessor(pp);
+
 export const shockWavePP = new ShockWavePostProcessor();
 game.graphicsContext.addPostProcessor(shockWavePP);
 
@@ -75,14 +75,9 @@ document.addEventListener("keydown", event => {
   }
 
   if (event.key === Keys.Escape) {
-    console.log("taking screenshot");
-
-    let ss = game.screenshot().then(img => {
-      let link = document.createElement("a");
-      link.download = "screenshot.png";
-      link.href = img.src;
-      link.click();
-    });
+    globalMuteFlag = !globalMuteFlag;
+    if (!globalMuteFlag) soundManager.channel.unmute("music");
+    else soundManager.channel.mute("music");
   }
 });
 //initializeMap();
