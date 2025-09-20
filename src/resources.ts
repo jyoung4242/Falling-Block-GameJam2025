@@ -34,8 +34,7 @@ import map from "./Assets/Graphics/map.png";
 //music
 import titlesong from "./Assets/Sound/bgm/Title.ogg";
 import eolsong from "./Assets/Sound/bgm/eol.ogg";
-import gameoversong from "./Assets/sound/bgm/GAMEOVER.ogg";
-import l1song from "./Assets/Sound/bgm/LEVEL1.ogg";
+import gameoversong from "./Assets/Sound/bgm/GAMEOVER.ogg";
 import l2song from "./Assets/Sound/bgm/LEVEL2.ogg";
 import l3song from "./Assets/Sound/bgm/LEVEL3.ogg";
 import l4song from "./Assets/Sound/bgm/LEVEL4.ogg";
