@@ -68,13 +68,17 @@ game.graphicsContext.addPostProcessor(shockWavePP);
 
 let pauseState = false;
 document.addEventListener("keydown", event => {
+  console.log(event.key);
+
   if (event.key === "`") {
     pauseState = !pauseState;
     if (pauseState) game.timescale = 0;
     else game.timescale = 1;
   }
 
-  if (event.key === Keys.Backslash) {
+  if (event.key === `/`) {
+    console.log("mute");
+
     globalMuteFlag = !globalMuteFlag;
     if (!globalMuteFlag) soundManager.channel.unmute("music");
     else soundManager.channel.mute("music");
