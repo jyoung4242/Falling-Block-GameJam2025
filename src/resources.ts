@@ -26,7 +26,7 @@ import rock14 from "./Assets/Graphics/rocks/Horror_Stone_14-128x128.png";
 import StartButtonUp from "./Assets/Graphics/ButtonUp.png";
 import RestartButtonUp from "./Assets/Graphics/RESTARTBUTTONUP.png";
 import squirrelCursor from "./Assets/Graphics/squirrelCursorsmall.png";
-import container from "./Assets/Graphics/container.png";
+import container from "./Assets/Graphics/Container.png";
 
 import vectroidFont from "./Assets/Fonts/Vipnagorgialla Rg.otf";
 import map from "./Assets/Graphics/map.png";
