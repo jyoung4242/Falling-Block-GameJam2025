@@ -74,7 +74,7 @@ document.addEventListener("keydown", event => {
     else game.timescale = 1;
   }
 
-  if (event.key === Keys.Escape) {
+  if (event.key === Keys.Backslash) {
     globalMuteFlag = !globalMuteFlag;
     if (!globalMuteFlag) soundManager.channel.unmute("music");
     else soundManager.channel.mute("music");
