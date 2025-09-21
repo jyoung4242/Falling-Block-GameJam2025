@@ -119,11 +119,14 @@ export class Player extends Actor {
       if (stickInterface == "leftStick") {
         this.lStick = value;
       }
+
       if (stickInterface == "buttonPressed" && value == 0) {
         //jump
         this.gpadButton = "pressed";
       } else if (stickInterface == "buttonReleased" && value == 0) {
         //released
+        console.log("RELEASING BUTTON");
+
         this.gpadButton = "released";
       }
     });
@@ -187,16 +190,20 @@ export class Player extends Actor {
       this.isRunning = false;
     }
 
-    if (this.gpadButton == "pressed") {
+    console.log(this.gpadButton, this.isSpaceHeld);
+
+    if (this.gpadButton == "pressed" && !this.isSpaceHeld) {
       this.isUsingGamepad = true;
       jumpRequest = true;
       this.isSpaceHeld = true;
-    } else {
+    } else if (this.gpadButton == "released" && this.isSpaceHeld) {
       this.isSpaceHeld = false;
     }
 
     //check keyboard control  -> controls isRunning and isJumping/isFalling
     if (this.kc.keys.length > 0 && !this.isUsingGamepad) {
+      console.log("here?");
+
       if (this.kc.keys.includes("ArrowLeft") || this.kc.keys.includes("KeyA")) {
         this.isRunning = true;
         this.direction = "left";
@@ -222,7 +229,11 @@ export class Player extends Actor {
       }
     } else {
       //no key pressed
+      console.log(this.isUsingGamepad);
+
       if (!this.isUsingGamepad) {
+        console.log("or here?");
+
         this.isRunning = false;
         this.isSpaceHeld = false;
       }

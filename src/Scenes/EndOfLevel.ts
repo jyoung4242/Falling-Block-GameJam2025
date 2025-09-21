@@ -18,6 +18,7 @@ export class EndOfLevel extends Scene {
   requestAnalyticsSignal = new Signal("requestAnalytics");
   publishedAnalyticsSignal = new Signal("publishedAnalytics");
   saveSignal = new Signal("saveAnalytics");
+  gpad = new Signal("gamepad");
 
   roundDataContainer: ScreenElement | null = null;
   gameDataContainer: ScreenElement | null = null;
@@ -162,11 +163,20 @@ export class EndOfLevel extends Scene {
       this.textGraphic?.updateText("End of Level");
       soundManager.play("eolSong");
     }
+
+    this.gpad.listen((evt: CustomEvent) => {
+      let gpadInterface = evt.detail.params[1];
+      let gpadValue = evt.detail.params[2];
+      if (gpadInterface == "buttonPressed" && gpadValue == 0) {
+        context.engine.goToScene("main");
+      }
+    });
   }
 
   onDeactivate(context: SceneActivationContext) {
     soundManager.stop("eolSong");
     soundManager.stop("gameOverSong");
+    this.gpad.stopListening();
   }
 
   onPreUpdate(engine: Engine, elapsed: number): void {
