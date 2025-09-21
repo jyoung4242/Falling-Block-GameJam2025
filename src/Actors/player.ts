@@ -27,6 +27,7 @@ const JUMP_HEIGHT = -300;
 
 export class Player extends Actor {
   activeBlockCollisions: Block[] = [];
+  gpad = new Signal("gamepad");
   shockwaveSignal = new Signal("shockwave");
   analyticsSignal = new Signal("setAnalytics");
   currentStamina = 100;
@@ -57,6 +58,7 @@ export class Player extends Actor {
     | "deadLeft"
   >;
   isRunning = false;
+  isUsingGamepad = false;
   direction: "left" | "right" = "right";
   isJumping = false;
   isHittingWallLeft = false;
@@ -69,6 +71,9 @@ export class Player extends Actor {
   isDrowning = false;
   isDead = false;
   hasUsedWallJump = false;
+
+  lStick: "left" | "right" | "idle" = "idle";
+  gpadButton: "pressed" | "released" = "released";
 
   constructor() {
     super({
@@ -106,6 +111,21 @@ export class Player extends Actor {
     this.ac.set("idle1Right");
     this.fillLevel.listen((params: CustomEvent) => {
       this.currentFillLevel = params.detail.params[0];
+    });
+    this.gpad.listen((params: CustomEvent) => {
+      let stickInterface = params.detail.params[1];
+      let value = params.detail.params[2];
+
+      if (stickInterface == "leftStick") {
+        this.lStick = value;
+      }
+      if (stickInterface == "buttonPressed" && value == 0) {
+        //jump
+        this.gpadButton = "pressed";
+      } else if (stickInterface == "buttonReleased" && value == 0) {
+        //released
+        this.gpadButton = "released";
+      }
     });
   }
 
@@ -150,10 +170,33 @@ export class Player extends Actor {
     } else {
       this.isDrowning = false;
     }
+    let jumpRequest = false;
+    //check gamepad
+
+    if (this.lStick == "left") {
+      this.isUsingGamepad = true;
+      this.isRunning = true;
+      this.direction = "left";
+    } else if (this.lStick == "right") {
+      this.isUsingGamepad = true;
+      this.isRunning = true;
+      this.direction = "right";
+    }
+
+    if (this.isUsingGamepad && this.lStick == "idle") {
+      this.isRunning = false;
+    }
+
+    if (this.gpadButton == "pressed") {
+      this.isUsingGamepad = true;
+      jumpRequest = true;
+      this.isSpaceHeld = true;
+    } else {
+      this.isSpaceHeld = false;
+    }
 
     //check keyboard control  -> controls isRunning and isJumping/isFalling
-    let jumpRequest = false;
-    if (this.kc.keys.length > 0) {
+    if (this.kc.keys.length > 0 && !this.isUsingGamepad) {
       if (this.kc.keys.includes("ArrowLeft") || this.kc.keys.includes("KeyA")) {
         this.isRunning = true;
         this.direction = "left";
@@ -179,8 +222,10 @@ export class Player extends Actor {
       }
     } else {
       //no key pressed
-      this.isRunning = false;
-      this.isSpaceHeld = false;
+      if (!this.isUsingGamepad) {
+        this.isRunning = false;
+        this.isSpaceHeld = false;
+      }
     }
 
     // check collisions -> isOnGround, isHittingWall

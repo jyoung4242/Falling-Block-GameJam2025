@@ -2,18 +2,17 @@
 import "./style.css";
 
 import { UI } from "@peasy-lib/peasy-ui";
-import { Engine, DisplayMode, Random, Color, Vector, vec, SoundManager, Keys } from "excalibur";
+import { Engine, DisplayMode, Random, Color, vec, SoundManager } from "excalibur";
 import { model, template } from "./UI/UI";
 import { mainScene } from "./Scenes/main";
 import { loader, Resources } from "./resources";
 import { EndOfLevel } from "./Scenes/EndOfLevel";
 import { IntroScene } from "./Scenes/Intro";
 import { ShockWavePostProcessor } from "./Shaders/shockwave";
-import { WellLighting } from "./Shaders/WellLight";
 import { GameAnalytics } from "./Lib/analytics";
-import { initializeMap } from "./Actors/level";
-import { JsfxrResource, SoundConfig } from "@excaliburjs/plugin-jsfxr";
+import { JsfxrResource } from "@excaliburjs/plugin-jsfxr";
 import { sounds } from "./Assets/Sound/sounds";
+import { GamepadManager } from "./Lib/GamepadManager";
 
 await UI.create(document.body, model, template).attached;
 
@@ -39,6 +38,8 @@ const game = new Engine({
     },
   },
 });
+
+let gpManager = new GamepadManager(game);
 
 let globalMuteFlag = false;
 export const soundManager = new SoundManager({
@@ -88,3 +89,7 @@ document.addEventListener("keydown", event => {
 export const gameAnalytics = new GameAnalytics();
 gameAnalytics.loadData();
 gameAnalytics.logData();
+
+game.onPreUpdate = (engine: Engine, elapsed: number) => {
+  gpManager.update(elapsed);
+};
