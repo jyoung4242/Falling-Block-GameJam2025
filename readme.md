@@ -2,6 +2,8 @@
 
 # Falling Block — Game Jam 2025
 
+![Banner](./itchpage/bannershot.png)
+
 A platformer game built using **ExcaliburJS** for the Falling Block Game Jam 2025.  
 Jump, run, and dodge your way through falling blocks and challenging obstacles!
 
