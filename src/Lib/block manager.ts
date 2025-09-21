@@ -7,8 +7,8 @@ export class BlockManager {
   blockSignal = new Signal("blockLanded");
   blockStopSignal = new Signal("blockStop");
   exitMetSignal = new Signal("exitMet");
-  startNextRoundSignal = new Signal("startNextRound");
-  clearWarningSignal = new Signal("clearWarning");
+  // startNextRoundSignal = new Signal("startNextRound");
+  // clearWarningSignal = new Signal("clearWarning");
   analyticsSignal = new Signal("setAnalytics");
   fillSignal = new Signal("fill");
   gameLevel = 0;
@@ -44,15 +44,15 @@ export class BlockManager {
       blocks?.forEach(b => b.kill());
     });
 
-    this.clearWarningSignal.listen(() => {
-      //   this.dropWarning = null;
-    });
+    // this.clearWarningSignal.listen(() => {
+    //   //   this.dropWarning = null;
+    // });
 
-    this.startNextRoundSignal.listen(() => {
-      console.log("start next round");
-      this.bumpLevel();
-      this.isActive = true;
-    });
+    // this.startNextRoundSignal.listen(() => {
+    //   console.log("start next round");
+    //   this.bumpLevel();
+    //   this.isActive = true;
+    // });
 
     this.blockSignal.listen(() => {
       if (!this.isBlockLanded) {
@@ -79,11 +79,17 @@ export class BlockManager {
     this.triggerTik = 0;
     this.isFilling = false;
     //based on game level, shorten the time between blocks
+    // console.log("game progression:", this.gameLevel);
+
     for (let i = 1; i < this.gameLevel; i++) {
-      this.triggerLimit *= 0.9;
-      this.maxVel *= 1.1;
-      this.fillTimeLimit *= 0.9;
+      this.triggerLimit *= 0.95;
+      this.maxVel *= 1.05;
+      this.fillTimeLimit *= 0.95;
     }
+    // console.log("trigger limit:", this.triggerLimit);
+    // console.log("max vel:", this.maxVel);
+    // console.log("fill time limit:", this.fillTimeLimit);
+
     this.fillSignal.send([false, this.fillTimeLimit]);
     this.scene?.entities.forEach(e => {
       if (e instanceof Block) {
@@ -111,14 +117,14 @@ export class BlockManager {
     }
   }
 
-  bumpLevel() {
-    this.triggerLimit *= 0.9;
-    this.warneringLimit *= 0.9;
-    this.triggerTik = 0;
-    this.maxVel *= 1.1;
-    this.fillTimeLimit *= 0.9;
-    this.isFilling = false;
-  }
+  // bumpLevel() {
+  //   this.triggerLimit *= 0.9;
+  //   this.warneringLimit *= 0.9;
+  //   this.triggerTik = 0;
+  //   this.maxVel *= 1.1;
+  //   this.fillTimeLimit *= 0.9;
+  //   this.isFilling = false;
+  // }
 
   regScene(scene: Scene) {
     this.scene = scene;

@@ -20,7 +20,7 @@ export class EOLDataContainer extends ScreenElement {
     });
 
     this.convertedTime = this.formatTime(data.ELAPSEDTIME);
-    console.log("time: ", this.convertedTime);
+    // console.log("time: ", this.convertedTime);
     this.scope = type.toUpperCase() as "ROUND" | "GAME" | "ALLTIME";
 
     this.textToRender = `
@@ -35,8 +35,8 @@ export class EOLDataContainer extends ScreenElement {
     this.graphics.use(Resources.container.toSprite().clone());
     this.textChild = new EOLDataText(type, data);
     this.addChild(this.textChild);
-    console.log(this.textChild);
-    console.log(this.textToRender);
+    // console.log(this.textChild);
+    // console.log(this.textToRender);
   }
 
   updateText(data: Record<keyof typeof AnalyticsKey, number>) {

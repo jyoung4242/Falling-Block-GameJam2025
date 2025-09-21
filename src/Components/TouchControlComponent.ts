@@ -80,8 +80,6 @@ export class JoystickComponent extends Component {
     primary.off("move", this.moveHandler);
  */
 
-    console.log("closing tc");
-
     this.upHandler?.close();
     this.downHandler?.close();
     this.moveHandler?.close();
@@ -89,8 +87,6 @@ export class JoystickComponent extends Component {
   }
 
   private onDown(evt: PointerEvent) {
-    console.log("tc pointerdown");
-
     this.gestureStartPos = evt.worldPos.clone();
     this.currentPos = evt.worldPos.clone();
     this.moveDelta = Vector.Zero;
@@ -148,7 +144,6 @@ export class JoystickComponent extends Component {
   }
 
   onUp(evt: PointerEvent) {
-    console.log("tc pointerup");
     if (!this.isDown) return;
 
     this.isDown = false;

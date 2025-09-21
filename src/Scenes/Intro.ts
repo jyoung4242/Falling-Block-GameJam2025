@@ -9,6 +9,8 @@ import { UIContainer, UILayout } from "../Lib/UILayout";
 import { InstructionsElement } from "../ScreenElements/TitleUIElements";
 
 export class IntroScene extends Scene {
+  buttonState: boolean = false;
+  latchState: boolean = false;
   gpad = new Signal("gamepad");
   layout: any;
   constructor() {
@@ -20,8 +22,12 @@ export class IntroScene extends Scene {
     this.gpad.listen((evt: CustomEvent) => {
       let gpadInterface = evt.detail.params[1];
       let gpadValue = evt.detail.params[2];
+
       if (gpadInterface == "buttonPressed" && gpadValue == 0) {
-        context.engine.goToScene("main");
+        this.buttonState = true;
+      }
+      if (gpadInterface == "buttonReleased" && gpadValue == 0 && this.buttonState) {
+        context.engine.goToScene("main", { sceneActivationData: { newGame: true } });
       }
     });
   }

@@ -19,6 +19,7 @@ export class EndOfLevel extends Scene {
   publishedAnalyticsSignal = new Signal("publishedAnalytics");
   saveSignal = new Signal("saveAnalytics");
   gpad = new Signal("gamepad");
+  resetButton: RestartButton | null = null;
 
   roundDataContainer: ScreenElement | null = null;
   gameDataContainer: ScreenElement | null = null;
@@ -31,7 +32,7 @@ export class EndOfLevel extends Scene {
       this.roundData = evt.detail.params[0];
       this.gameData = evt.detail.params[1];
       this.alltimeData = evt.detail.params[2];
-      console.log("END OF ROUND", this.roundData, this.gameData, this.alltimeData);
+      // console.log("END OF ROUND", this.roundData, this.gameData, this.alltimeData);
       //update screen text when ready
       if (this.roundDataContainer)
         (this.roundDataContainer as EOLDataContainer).updateText(this.roundData as Record<keyof typeof AnalyticsKey, number>);
@@ -88,7 +89,7 @@ export class EndOfLevel extends Scene {
       alignmentContentStrategy: "center",
       color: Color.Transparent,
     });
-    console.log(this.roundData);
+    // console.log(this.roundData);
 
     this.roundDataContainer = new EOLDataContainer("round", this.roundData as Record<keyof typeof AnalyticsKey, number>);
     endOfRoundContainer.addChild(this.roundDataContainer);
@@ -147,7 +148,8 @@ export class EndOfLevel extends Scene {
       color: Color.Transparent,
     });
     buttonContainer.addChildContainer(buttonPlacementContainer);
-    buttonPlacementContainer.addChild(new RestartButton());
+    this.resetButton = new RestartButton();
+    buttonPlacementContainer.addChild(this.resetButton);
     mainContainer.addChildContainer(buttonContainer);
 
     //this.add(levelMap);
@@ -168,7 +170,8 @@ export class EndOfLevel extends Scene {
       let gpadInterface = evt.detail.params[1];
       let gpadValue = evt.detail.params[2];
       if (gpadInterface == "buttonPressed" && gpadValue == 0) {
-        context.engine.goToScene("main");
+        if (context.data!.status === "lose") context.engine.goToScene("main", { sceneActivationData: { newGame: true } });
+        else context.engine.goToScene("main", { sceneActivationData: { newGame: false } });
       }
     });
   }

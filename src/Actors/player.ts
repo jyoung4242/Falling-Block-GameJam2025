@@ -286,8 +286,6 @@ export class Player extends Actor {
     }
 
     //manage velocity - Jumping/Falling/standing on ground
-    console.log(this.rc.isRiding);
-
     if (this.isOnGround && !this.rc.isRiding) {
       this.hasUsedWallJump = false;
       this.isFalling = false;
@@ -412,7 +410,5 @@ export class Player extends Actor {
       let animation: "deadLeft" | "deadRight" = this.direction == "left" ? "deadLeft" : "deadRight";
       this.ac.set(animation);
     }
-
-    this.playerUpdateSignal.send([vec(this.pos.x, this.pos.y + 16), PLAYER_GLOW_RADIUS]);
   }
 }

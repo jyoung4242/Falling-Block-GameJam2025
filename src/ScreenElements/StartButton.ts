@@ -13,26 +13,31 @@ export class Startbutton extends ScreenElement {
   onInitialize(engine: Engine): void {
     this.on("pointerup", () => {
       sndPlugin.playSound("buttonClick");
-      engine.goToScene("main");
+      debugger;
+      engine.goToScene("main", { sceneActivationData: { newGame: true } });
     });
-    this.playerUpdateSignal.send([vec(this.pos.x + 64, this.pos.y), 128]);
   }
 }
 
 export class RestartButton extends ScreenElement {
   resetGameSignal = new Signal("resetGame");
   playerUpdateSignal = new Signal("playerUpdate");
+  mode: "win" | "lose" | undefined;
   constructor() {
     super({ width: 128, height: 64, color: Color.Transparent }); //pos: new Vector(32 * 6 - 64, 32 * 20)
     this.graphics.use(Resources.RestartButtonUp.toSprite());
+  }
+
+  setMode(mode: "win" | "lose") {
+    this.mode = mode;
   }
 
   onInitialize(engine: Engine): void {
     this.on("pointerup", () => {
       sndPlugin.playSound("buttonClick");
       this.resetGameSignal.send();
-      engine.goToScene("main");
+      if (this.mode == "win") engine.goToScene("eol", { sceneActivationData: { newGame: false } });
+      else engine.goToScene("eol", { sceneActivationData: { newGame: true } });
     });
-    this.playerUpdateSignal.send([vec(this.pos.x + 64, this.pos.y), 128]);
   }
 }

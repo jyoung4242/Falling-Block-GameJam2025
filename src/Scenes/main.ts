@@ -22,7 +22,10 @@ export class mainScene extends Scene {
     super();
   }
 
-  onActivate(context: SceneActivationContext<unknown>): void {
+  onActivate(context: SceneActivationContext<{ newGame: boolean }>): void {
+    let gameReset = context.data!.newGame as boolean;
+    if (gameReset) this.resetGame();
+
     //reset logic
     this.gameLevel++;
     this.blockManager.reset(this.gameLevel);
@@ -37,6 +40,7 @@ export class mainScene extends Scene {
     soundManager.play(this.song);
   }
   onDeactivate(context: SceneActivationContext): void {
+    this.blockManager.reset(this.gameLevel);
     soundManager.stop(this.song);
   }
 
@@ -68,6 +72,10 @@ export class mainScene extends Scene {
 
   onPreUpdate(engine: Engine, elapsed: number): void {
     this.blockManager.update(elapsed);
+  }
+
+  resetGame() {
+    this.gameLevel = 0;
   }
 
   slowTime() {
