@@ -6,7 +6,7 @@ export class TitleTextElement extends ScreenElement {
     super({
       color: Color.Transparent,
       z: 20,
-      width: 400,
+      width: 384,
       height: 100,
       pos: new Vector(0, 50),
     });
@@ -28,7 +28,7 @@ class TitleTextGraphics extends Graphic {
   protected _drawImage(ex: ExcaliburGraphicsContext, x: number, y: number): void {
     let cnv = document.createElement("canvas");
     let ctx = cnv.getContext("2d");
-    cnv.width = 400;
+    cnv.width = 384;
     cnv.height = 100;
     if (!ctx) return;
     ctx.fillStyle = "#83a923";
