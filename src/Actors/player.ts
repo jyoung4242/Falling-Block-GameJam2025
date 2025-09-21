@@ -20,6 +20,7 @@ import { AnimationComponent } from "../Components/AnimationComponent";
 import { TouchingComponent } from "../Components/TouchingComponent";
 import { Block } from "./block";
 import { shockWavePP, sndPlugin, STARTING_POINT } from "../main";
+import { RidingComponent } from "../Components/ridingComponent";
 
 const PLAYER_GLOW_RADIUS = 50;
 const GRAVITY = 450;
@@ -41,6 +42,7 @@ export class Player extends Actor {
   currentFillLevel = 0;
   heightPercentage = 0;
   updateStaminaSignal: Signal = new Signal("updateStamina");
+  rc: RidingComponent = new RidingComponent();
   tc: TouchingComponent = new TouchingComponent();
   kc: KeyBoardControlComponent;
   ac: AnimationComponent<
@@ -105,6 +107,7 @@ export class Player extends Actor {
       deadLeft: playerDyingLeft,
     });
 
+    this.addComponent(this.rc);
     this.addComponent(this.kc);
     this.addComponent(this.ac);
     this.addComponent(this.tc);
@@ -239,6 +242,19 @@ export class Player extends Actor {
       }
     }
 
+    if (this.isOnGround) {
+      let groundTypes = this.tc.bottom.values();
+      for (let groundType of groundTypes) {
+        if (groundType instanceof Block && groundType.isBlockStopped == false) {
+          this.rc.BlockBeingRidden = groundType;
+          this.rc.isRiding = true;
+        } else {
+          this.rc.isRiding = false;
+          this.rc.BlockBeingRidden = null;
+        }
+      }
+    }
+
     this.isHittingWallLeft = this.tc.left.size > 0;
     this.isHittingWallRight = this.tc.right.size > 0;
     this.isHittingBlockFromAbove = this.tc.top.size > 0;
@@ -270,7 +286,9 @@ export class Player extends Actor {
     }
 
     //manage velocity - Jumping/Falling/standing on ground
-    if (this.isOnGround) {
+    console.log(this.rc.isRiding);
+
+    if (this.isOnGround && !this.rc.isRiding) {
       this.hasUsedWallJump = false;
       this.isFalling = false;
       this.isJumping = false;
@@ -285,6 +303,23 @@ export class Player extends Actor {
         this.acc.y = GRAVITY;
         this.isJumping = true;
         this.isFalling = false;
+      }
+    } else if (this.isOnGround && this.rc.isRiding) {
+      this.hasUsedWallJump = false;
+      this.isFalling = false;
+      this.isJumping = false;
+      this.acc.y = 0;
+      if (jumpRequest && this.currentStamina > 5) {
+        sndPlugin.playSound("jump");
+        this.analyticsSignal.send(["ROUND", "NUMJUMPS", 1]);
+        this.currentStamina -= 5;
+        this.updateStaminaSignal.send([this.currentStamina]);
+        this.vel.y = JUMP_HEIGHT;
+        this.acc.y = GRAVITY;
+        this.isJumping = true;
+        this.isFalling = false;
+      } else {
+        this.vel.y = (this.rc.BlockBeingRidden as Block).vel.y;
       }
     } else {
       this.acc.y = GRAVITY;
