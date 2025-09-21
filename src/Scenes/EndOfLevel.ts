@@ -75,7 +75,8 @@ export class EndOfLevel extends Scene {
       alignmentContentStrategy: "center",
       color: Color.Transparent,
     });
-    titleContainer.addChild(new EndOfLevelText());
+    this.textGraphic = new EndOfLevelText();
+    titleContainer.addChild(this.textGraphic);
     mainContainer.addChildContainer(titleContainer);
 
     const endOfRoundContainer = new UIContainer({
@@ -89,7 +90,6 @@ export class EndOfLevel extends Scene {
       alignmentContentStrategy: "center",
       color: Color.Transparent,
     });
-    // console.log(this.roundData);
 
     this.roundDataContainer = new EOLDataContainer("round", this.roundData as Record<keyof typeof AnalyticsKey, number>);
     endOfRoundContainer.addChild(this.roundDataContainer);

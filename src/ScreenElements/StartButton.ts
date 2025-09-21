@@ -13,7 +13,6 @@ export class Startbutton extends ScreenElement {
   onInitialize(engine: Engine): void {
     this.on("pointerup", () => {
       sndPlugin.playSound("buttonClick");
-      debugger;
       engine.goToScene("main", { sceneActivationData: { newGame: true } });
     });
   }
