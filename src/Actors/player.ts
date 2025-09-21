@@ -35,6 +35,7 @@ export class Player extends Actor {
   //   isFalling = true;
   maxVel = 450;
   maxVelX = 75;
+  pauseSignal = new Signal("pause");
   playerUpdateSignal = new Signal("playerUpdate");
   changeTimeSignal = new Signal("changeTime");
   fillLevel = new Signal("fillLevel");
@@ -71,6 +72,7 @@ export class Player extends Actor {
   isDrowning = false;
   isDead = false;
   hasUsedWallJump = false;
+  ifPaused = false;
 
   lStick: "left" | "right" | "idle" = "idle";
   gpadButton: "pressed" | "released" = "released";
@@ -125,8 +127,6 @@ export class Player extends Actor {
         this.gpadButton = "pressed";
       } else if (stickInterface == "buttonReleased" && value == 0) {
         //released
-        console.log("RELEASING BUTTON");
-
         this.gpadButton = "released";
       }
     });
@@ -189,9 +189,6 @@ export class Player extends Actor {
     if (this.isUsingGamepad && this.lStick == "idle") {
       this.isRunning = false;
     }
-
-    console.log(this.gpadButton, this.isSpaceHeld);
-
     if (this.gpadButton == "pressed" && !this.isSpaceHeld) {
       this.isUsingGamepad = true;
       jumpRequest = true;
@@ -202,8 +199,6 @@ export class Player extends Actor {
 
     //check keyboard control  -> controls isRunning and isJumping/isFalling
     if (this.kc.keys.length > 0 && !this.isUsingGamepad) {
-      console.log("here?");
-
       if (this.kc.keys.includes("ArrowLeft") || this.kc.keys.includes("KeyA")) {
         this.isRunning = true;
         this.direction = "left";
@@ -229,11 +224,8 @@ export class Player extends Actor {
       }
     } else {
       //no key pressed
-      console.log(this.isUsingGamepad);
 
       if (!this.isUsingGamepad) {
-        console.log("or here?");
-
         this.isRunning = false;
         this.isSpaceHeld = false;
       }

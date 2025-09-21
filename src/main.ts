@@ -13,6 +13,7 @@ import { GameAnalytics } from "./Lib/analytics";
 import { JsfxrResource } from "@excaliburjs/plugin-jsfxr";
 import { sounds } from "./Assets/Sound/sounds";
 import { GamepadManager } from "./Lib/GamepadManager";
+import { Signal } from "./Lib/Signals";
 
 await UI.create(document.body, model, template).attached;
 
@@ -69,8 +70,6 @@ game.graphicsContext.addPostProcessor(shockWavePP);
 
 let pauseState = false;
 document.addEventListener("keydown", event => {
-  console.log(event.key);
-
   if (event.key === "`") {
     pauseState = !pauseState;
     if (pauseState) game.timescale = 0;
@@ -78,18 +77,13 @@ document.addEventListener("keydown", event => {
   }
 
   if (event.key === `/`) {
-    console.log("mute");
-
     globalMuteFlag = !globalMuteFlag;
     if (!globalMuteFlag) soundManager.channel.unmute("music");
     else soundManager.channel.mute("music");
   }
 });
+
 //initializeMap();
 export const gameAnalytics = new GameAnalytics();
 gameAnalytics.loadData();
 gameAnalytics.logData();
-
-game.onPreUpdate = (engine: Engine, elapsed: number) => {
-  gpManager.update(elapsed);
-};
