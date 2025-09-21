@@ -83,6 +83,10 @@ document.addEventListener("keydown", event => {
   }
 });
 
+game.onPreUpdate = (engine: Engine, elapsed: number) => {
+  gpManager.update(elapsed);
+};
+
 //initializeMap();
 export const gameAnalytics = new GameAnalytics();
 gameAnalytics.loadData();

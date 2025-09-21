@@ -34,8 +34,7 @@ export class Player extends Actor {
   maxStamina = 100;
   //   isFalling = true;
   maxVel = 450;
-  maxVelX = 75;
-  pauseSignal = new Signal("pause");
+  maxVelX = 125;
   playerUpdateSignal = new Signal("playerUpdate");
   changeTimeSignal = new Signal("changeTime");
   fillLevel = new Signal("fillLevel");
@@ -72,7 +71,6 @@ export class Player extends Actor {
   isDrowning = false;
   isDead = false;
   hasUsedWallJump = false;
-  ifPaused = false;
 
   lStick: "left" | "right" | "idle" = "idle";
   gpadButton: "pressed" | "released" = "released";
