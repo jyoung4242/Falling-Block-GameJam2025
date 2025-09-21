@@ -126,17 +126,9 @@ If you find bugs, feel free to open an issue!
 
 ### Contributing
 
-Thanks for being interested! Here’s how to contribute:
-
-Fork the project.
-
-Make branches for your features/bugs: git checkout -b feature/YourFeature
-
-Ensure everything works and add any tests if applicable.
-
-Submit a pull request describing what you changed.
-
 Because this is a Game Jam project, major changes may be limited, but feedback & small fixes are welcome.
+
+No contributions are expected.
 
 ## License
 
