@@ -54,27 +54,18 @@ export class GameAnalytics {
     this.requestAnalyticsSignal.listen((evt: CustomEvent) => {
       //Roll up current round into current game and alltime
       let status = evt.detail.params[0];
-      if (status === "win") this.currentGame.CURRENTLEVEL = this.currentRound.CURRENTLEVEL + 1;
-      else this.currentGame.CURRENTLEVEL = this.currentRound.CURRENTLEVEL;
       this.upDateCurrentGame();
       this.upDateAlltime();
       this.saveData();
       this.publishedAnalyticsSignal.send([this.currentRound, this.currentGame, this.alltime]);
+      if (status === "win") this.currentGame.CURRENTLEVEL = this.currentRound.CURRENTLEVEL + 1;
+      else this.currentGame.CURRENTLEVEL = this.currentRound.CURRENTLEVEL;
     });
 
     this.analyticsSignal.listen((evt: CustomEvent) => {
-      let scope: AnalyticsScope = evt.detail.params[0];
       let key: AnalyticsKey = evt.detail.params[1];
       let value: number = evt.detail.params[2];
-
-      switch (scope) {
-        case "ROUND":
-          this.currentRound[key] = this.currentRound[key] + value;
-        case "GAME":
-          this.currentGame[key] = this.currentGame[key] + value;
-        case "ALLTIME":
-          this.alltime[key] = this.alltime[key] + value;
-      }
+      this.currentRound[key] = this.currentRound[key] + value;
     });
   }
 

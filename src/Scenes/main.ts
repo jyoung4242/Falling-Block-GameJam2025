@@ -40,7 +40,6 @@ export class mainScene extends Scene {
     soundManager.play(this.song);
   }
   onDeactivate(context: SceneActivationContext): void {
-    this.blockManager.reset(this.gameLevel);
     soundManager.stop(this.song);
   }
 

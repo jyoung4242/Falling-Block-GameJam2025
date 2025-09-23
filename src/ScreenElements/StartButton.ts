@@ -13,6 +13,8 @@ export class Startbutton extends ScreenElement {
   onInitialize(engine: Engine): void {
     this.on("pointerup", () => {
       sndPlugin.playSound("buttonClick");
+      console.log('switching to "main"');
+
       engine.goToScene("main", { sceneActivationData: { newGame: true } });
     });
   }
@@ -35,8 +37,8 @@ export class RestartButton extends ScreenElement {
     this.on("pointerup", () => {
       sndPlugin.playSound("buttonClick");
       this.resetGameSignal.send();
-      if (this.mode == "win") engine.goToScene("eol", { sceneActivationData: { newGame: false } });
-      else engine.goToScene("eol", { sceneActivationData: { newGame: true } });
+      if (this.mode == "win") engine.goToScene("main", { sceneActivationData: { newGame: false } });
+      else engine.goToScene("main", { sceneActivationData: { newGame: true } });
     });
   }
 }

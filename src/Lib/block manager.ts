@@ -4,6 +4,7 @@ import { Signal } from "./Signals";
 // import { DropWarning } from "../Actors/warning";
 
 export class BlockManager {
+  resetAnalyticsSignal = new Signal("resetGame");
   blockSignal = new Signal("blockLanded");
   blockStopSignal = new Signal("blockStop");
   exitMetSignal = new Signal("exitMet");
@@ -73,6 +74,7 @@ export class BlockManager {
   }
 
   reset(level: number) {
+    this.resetAnalyticsSignal.send();
     this.gameLevel = level;
     this.isBlockLanded = false;
     this.isBlocksDone = false;
